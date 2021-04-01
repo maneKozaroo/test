@@ -1,0 +1,82 @@
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<script>
+
+    var onStart = function () {
+        console.log("On start");
+    }
+
+    var onDidReceiveAudioChunks = function (audioChunks) {
+        console.log(audioChunks);
+
+        // Please check that the format is wav.
+        // playback(audioChunks);
+    }
+
+    var onStop = function() {
+        console.log("On stop");
+    }
+
+    var onError = function (code) {
+        console.log("Error ", code);
+    }
+
+    function startListening() {
+        window.RawAudioRecorder.startListening(onStart, onDidReceiveAudioChunks, onStop, onError);
+    }
+
+    function stopListening() {
+        window.RawAudioRecorder.stopListening();
+    }
+
+    function openSettings() {
+        Native.openSystemSettings();
+    }
+
+    function clearCookie() {
+        Native.clearCookie();
+    }
+
+    function playback(byteArray) {
+        var context = new webkitAudioContext();
+        var source = context.createBufferSource();
+        var arrayBuffer = new ArrayBuffer(byteArray.length);
+        var bufferView = new Uint8Array(arrayBuffer);
+        for (i = 0; i < byteArray.length; i++) {
+            bufferView[i] = byteArray[i];
+        }
+        source.buffer = context.createBuffer(arrayBuffer, false);
+        source.connect(context.destination);
+        source.start(0);
+    }
+
+</script>
+
+<body>
+    <h1>
+        DEBUG
+    </h1>
+    <h2 id="mic-header">Raw Microphone</h2>
+    <button onclick="startListening()">Start Listening</button>
+    <br />
+    <br />
+    <button onclick="stopListening()">Stop Listening</button>
+    <br />
+    <br />
+    <button onclick="openSettings()">Settings</button>
+    <br />
+    <br />
+    <button onclick="clearCookie()">Clear Cookie</button>
+    <script>
+        if (window.RawAudioRecorder != null) {
+            document.getElementById("mic-header").innerHTML = "RawAudioRecorder (supported!)";
+        } else {
+            document.getElementById("mic-header").innerHTML = "RawAudioRecorder (not supported!)";
+        }
+    </script>
+</body>
+
+</html>

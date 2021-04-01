@@ -41,16 +41,20 @@
     }
 
     function playback(byteArray) {
-        var context = new webkitAudioContext();
-        var source = context.createBufferSource();
-        var arrayBuffer = new ArrayBuffer(byteArray.length);
-        var bufferView = new Uint8Array(arrayBuffer);
-        for (i = 0; i < byteArray.length; i++) {
-            bufferView[i] = byteArray[i];
+        try {
+            var context = new webkitAudioContext();
+            var source = context.createBufferSource();
+            var arrayBuffer = new ArrayBuffer(byteArray.length);
+            var bufferView = new Uint8Array(arrayBuffer);
+            for (i = 0; i < byteArray.length; i++) {
+                bufferView[i] = byteArray[i];
+            }
+            source.buffer = context.createBuffer(arrayBuffer, false);
+            source.connect(context.destination);
+            source.start(0);
+        } catch (error) {
+            console.log("playback error:", error)
         }
-        source.buffer = context.createBuffer(arrayBuffer, false);
-        source.connect(context.destination);
-        source.start(0);
     }
 
 </script>

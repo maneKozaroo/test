@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <script>
-    let audioChunkContainer = [];
+    let audioChunkContainer = new Uint8array();
 
     var onStart = function () {
         console.log("On start");
